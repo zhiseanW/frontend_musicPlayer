@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
 import { Container, Typography, Box, Button } from "@mui/material";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
 import {
   Table,
   TableBody,
@@ -11,25 +13,52 @@ import {
   Paper,
 } from "@mui/material";
 import Header from "../../components/Header";
-import { getCart } from "../../utils/api_cart";
+import { getCart, removeProductFromCart } from "../../utils/api_cart";
+
 export default function Cart() {
-  const [cartItems, setCartItems] = useState([]);
-  useEffect(() => {
-    const cart = getCart();
-    setCartItems(cart.map((item) => ({ ...item })));
-  }, []);
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
+  const { data: cartItems = [] } = useQuery({
+    queryKey: ["cart"],
+    queryFn: getCart,
+  });
+
+  const deleteCartMutation = useMutation({
+    mutationFn: removeProductFromCart,
+    onSuccess: () => {
+      enqueueSnackbar("Product is Removed from the cart", {
+        variant: "success",
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["cart"],
+      });
+    },
+    onError: (error) => {
+      enqueueSnackbar(error.response.data.message, {
+        variant: "error",
+      });
+    },
+  });
+
   const calculateTotal = () => {
-    return cartItems.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0
+    let total = 0;
+    cartItems.forEach((item) => {
+      total = total + item.quantity * item.price;
+    });
+    return total;
+  };
+
+  const handleRemoveFromCart = (_id) => {
+    const confirm = window.confirm(
+      "Are you sure you want to remove this item from cart?"
     );
+    if (confirm) {
+      deleteCartMutation.mutate(_id);
+    }
   };
-  const handleRemoveItem = (index) => {
-    const newCartItems = [...cartItems];
-    newCartItems.splice(index, 1);
-    setCartItems(newCartItems);
-    localStorage.setItem("cart", JSON.stringify(newCartItems));
-  };
+
   return (
     <Container>
       <Header />
@@ -43,7 +72,7 @@ export default function Cart() {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Song</TableCell>
+                  <TableCell>Songs</TableCell>
                   <TableCell align="center">Price</TableCell>
                   <TableCell align="center">Quantity</TableCell>
                   <TableCell align="right">Total</TableCell>
@@ -51,23 +80,26 @@ export default function Cart() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {cartItems.map((item, index) => (
+                {cartItems.map((item) => (
                   <TableRow
-                    key={item.id}
+                    key={item._id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      {item.description}
+                      {item.musicName}
                     </TableCell>
                     <TableCell align="center">${item.price}</TableCell>
                     <TableCell align="center">{item.quantity}</TableCell>
                     <TableCell align="right">
-                      ${item.price * item.quantity}
+                      ${(item.price * item.quantity).toFixed(2)}
                     </TableCell>
                     <TableCell align="right">
                       <Button
-                        onClick={() => handleRemoveItem(index)}
-                        sx={{ backgroundColor: "red", color: "white" }}
+                        color="error"
+                        variant="contained"
+                        onClick={() => {
+                          handleRemoveFromCart(item._id);
+                        }}
                       >
                         Remove
                       </Button>{" "}
@@ -78,14 +110,20 @@ export default function Cart() {
               <TableFooter>
                 <TableRow>
                   <TableCell colSpan={4} align="right">
-                    Total: ${calculateTotal()}
+                    Total: ${calculateTotal().toFixed(2)}
                   </TableCell>
                 </TableRow>
               </TableFooter>
             </Table>
           </TableContainer>
           <Box mt={3} textAlign="right">
-            <Button variant="contained" color="primary">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                navigate("/checkout");
+              }}
+            >
               Checkout
             </Button>
           </Box>

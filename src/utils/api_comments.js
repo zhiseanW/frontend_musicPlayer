@@ -36,6 +36,7 @@ export const updateComment = async (data) => {
 };
 
 export const deleteComment = async (data) => {
+  // console.log(data);
   const res = await axios.delete(`${url}/comments/${data._id}`, {
     headers: {
       Authorization: "Bearer " + data.token,

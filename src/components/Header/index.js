@@ -1,4 +1,4 @@
-import { Typography, Divider, Box, Button } from "@mui/material";
+import { Typography, Divider, Box, Button, Avatar } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
@@ -92,6 +92,20 @@ export default function Header() {
           >
             Orders
           </Button>
+          <Button
+            style={{
+              textTransform: "capitalize",
+              textAlign: "center",
+              color: location.pathname === "/comments" ? "white" : "#0288d1",
+              backgroundColor:
+                location.pathname === "/comments" ? "#0288d1" : "white",
+            }}
+            onClick={() => {
+              navigate("/comments");
+            }}
+          >
+            Free Chat
+          </Button>
           {currentUser && currentUser.role === "admin" ? (
             <div>
               <Button
@@ -125,21 +139,21 @@ export default function Header() {
         </Box>
         {currentUser ? (
           <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <span>
-              <Button
-                style={{
-                  textTransform: "capitalize",
-                  color: location.pathname === "/profile" ? "white" : "#0288d1",
-                  backgroundColor:
-                    location.pathname === "/profile" ? "#0288d1" : "white",
-                }}
-                onClick={() => {
-                  navigate("/profile");
-                }}
-              >
-                Profile
-              </Button>
-            </span>
+            <Avatar></Avatar>
+            <Button
+              style={{
+                textTransform: "capitalize",
+                color: location.pathname === "/profile" ? "white" : "#0288d1",
+                backgroundColor:
+                  location.pathname === "/profile" ? "#0288d1" : "white",
+              }}
+              onClick={() => {
+                navigate("/profile");
+              }}
+            >
+              Profile
+            </Button>
+
             <Button
               style={{
                 textTransform: "capitalize",

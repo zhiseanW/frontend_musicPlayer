@@ -1,5 +1,5 @@
 import { useNavigate, Link } from "react-router-dom";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
 import {
   Typography,
@@ -14,7 +14,7 @@ import {
 
 import { addToCart } from "../../utils/api_cart";
 import { useCookies } from "react-cookie";
-// import AudioPlayer from "react-h5-audio-player";
+import { getComments } from "../../utils/api_comments";
 import "react-h5-audio-player/lib/styles.css";
 import ReactPlayer from "react-player";
 import { deleteMusic } from "../../utils/api_music";
@@ -29,6 +29,11 @@ export default function MusicCard(props) {
   const { enqueueSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
   console.log(music);
+
+  // const { data: comments = [] } = useQuery({
+  //   queryKey: ["comments"],
+  //   queryFn: () => getComments(),
+  // });
 
   const addToCartMutation = useMutation({
     mutationFn: addToCart,
@@ -84,7 +89,7 @@ export default function MusicCard(props) {
           <ReactPlayer url={music.music_url} style={{ width: "100%" }} />
         </Box>
 
-        <Typography fontWeight={"bold"}>{music.name}</Typography>
+        <Typography fontWeight={"bold"}>{music.musicName}</Typography>
         <Box
           style={{
             display: "flex",

@@ -33,7 +33,8 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/add" element={<MusicAdd />} />
               <Route path="/musics/:id" element={<MusicEdit />} />
-              <Route path="/comment/:id" element={<Comments />} />
+              {/* <Route path="/musics/:id/comment" element={<Comments />} /> */}
+              <Route path="/comments" element={<Comments />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/orders" element={<Orders />} />

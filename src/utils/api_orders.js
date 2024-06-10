@@ -47,5 +47,3 @@ export const deleteOrder = async (data) => {
   });
   return response.data;
 };
-
-// export const getOrder = async () => {};

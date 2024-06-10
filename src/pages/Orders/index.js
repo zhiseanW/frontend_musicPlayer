@@ -114,7 +114,7 @@ export default function Orders() {
                     <TableCell align="left">
                       {order.products.map((product) => (
                         <Typography variant="p" display={"flex"}>
-                          {product.name} ({product.quantity})
+                          {product.musicName} ({product.quantity})
                         </Typography>
                       ))}
                     </TableCell>

@@ -15,7 +15,9 @@ import {
   TextField,
   Card,
   Grid,
+  Paper,
   CardContent,
+  Box,
 } from "@mui/material";
 import { uploadImage } from "../../utils/api_images";
 
@@ -33,10 +35,6 @@ export default function ProfilePage() {
   const [editUserId, setEditUserId] = useState("");
 
   // load the user
-  const { data: user = [] } = useQuery({
-    queryKey: ["user"],
-    queryFn: () => getUser(),
-  });
 
   const updateUserMutation = useMutation({
     mutationFn: updateUser,
@@ -61,78 +59,26 @@ export default function ProfilePage() {
   return (
     <Container>
       <Header />
-      <Card sx={{ marginTop: "100px" }}>
-        <CardContent>
-          <Typography
-            variant="h3"
-            sx={{
-              margin: "20px 0",
-              fontWeight: "bold",
-              textAlign: "center",
-            }}
-          >
-            My Profile
-          </Typography>
 
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Typography variant="h5">UserName : Rick</Typography>
+      <Grid container spacing={2}>
+        <Grid item xs={12} container spacing={2}>
+          <Grid item sm={6} md={4} align="right">
+            <Paper
+              style={{ border: "2px solid", height: "200px", width: "200px" }}
+            >
+              Profile Picture
+            </Paper>
+          </Grid>
+          <Grid item sm={6} md={8} alignt="left" container>
+            <Grid item xs={12} container alignItems="flex-end">
+              <Typography variant="h4">{}</Typography>
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="h5">Email : Rick@gmail.cpm</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="h5">{user.bio}</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="h5"></Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="h5"></Typography>
+              <Typography variant="h4">{}</Typography>
             </Grid>
           </Grid>
-          <Button
-            onClick={() => {
-              setEditUserName(user.name);
-              setBio(user.bio);
-            }}
-          >
-            Edit
-          </Button>
-        </CardContent>
-      </Card>
-
-      {/*      */}
-
-      <Dialog open={openEditModal} onClose={() => setOpenEditModal(false)}>
-        <DialogTitle>Edit Profile</DialogTitle>
-        <DialogContent>
-          <TextField
-            label="Name"
-            variant="outlined"
-            sx={{ width: "100%", marginTop: "15px" }}
-            value={editUserName}
-            onChange={(e) => setEditUserName(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenEditModal(false)}>Cancel</Button>
-          <Button
-            variant="contained"
-            color="success"
-            onClick={() => {
-              updateUserMutation.mutate({
-                _id: editUserId,
-                name: editUserName,
-                bio: editBio,
-                token: token,
-              });
-            }}
-          >
-            Update
-          </Button>
-        </DialogActions>
-      </Dialog>
+        </Grid>
+      </Grid>
     </Container>
   );
 }

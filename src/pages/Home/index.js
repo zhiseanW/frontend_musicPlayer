@@ -17,6 +17,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useCookies } from "react-cookie";
 import { getMusics } from "../../utils/api_music";
 import { getGenres } from "../../utils/api_genres";
+import { getArtists } from "../../utils/api_artists";
 
 export default function Home() {
   const [cookies] = useCookies(["currentUser"]);
@@ -37,6 +38,11 @@ export default function Home() {
   const { data: genres = [] } = useQuery({
     queryKey: ["genres"],
     queryFn: () => getGenres(),
+  });
+
+  const { data: artists = [] } = useQuery({
+    queryKey: ["artists"],
+    queryFn: () => getArtists(),
   });
 
   return (
@@ -73,11 +79,11 @@ export default function Home() {
       <FormControl
         sx={{ marginTop: "10px", width: "200px", marginLeft: "10px" }}
       >
-        <InputLabel id="product-select-label">Songs</InputLabel>
+        <InputLabel id="product-select-label">Genre</InputLabel>
         <Select
           labelId="product-select-label"
           id="product-select"
-          label="Songs"
+          label="Genre"
           value={genre}
           onChange={(event) => {
             setGenre(event.target.value);
@@ -89,6 +95,30 @@ export default function Home() {
             return (
               <MenuItem key={genre._id} value={genre._id}>
                 {genre.name}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </FormControl>
+      <FormControl
+        sx={{ marginTop: "10px", width: "200px", marginLeft: "10px" }}
+      >
+        <InputLabel id="product-select-label">Artists</InputLabel>
+        <Select
+          labelId="product-select-label"
+          id="product-select"
+          label="Artists"
+          value={artist}
+          onChange={(event) => {
+            setArtist(event.target.value);
+            setPage(1);
+          }}
+        >
+          <MenuItem value="all">All</MenuItem>
+          {artists.map((artist) => {
+            return (
+              <MenuItem key={artist._id} value={artist._id}>
+                {artist.name}
               </MenuItem>
             );
           })}
@@ -128,7 +158,7 @@ export default function Home() {
         </Button>
         <span>Page: {page}</span>
         <Button
-          disabled={musics.length === 0 ? true : false}
+          disabled={musics.length < perPage ? true : false}
           onClick={() => setPage(page + 1)}
         >
           Next
