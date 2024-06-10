@@ -12,7 +12,7 @@ export const getOrders = async (token) => {
 };
 
 export const addNewOrder = async (data) => {
-  const response = await axios.post(
+  const res = await axios.post(
     `${url}/orders`, // url of the POST API
     JSON.stringify(data), // data you want to pass through the API in JSON format
     {
@@ -22,11 +22,11 @@ export const addNewOrder = async (data) => {
       },
     }
   );
-  return response.data;
+  return res.data;
 };
 
 export const updateOrder = async (data) => {
-  const response = await axios.put(
+  const res = await axios.put(
     `${url}/orders/${data._id}`,
     JSON.stringify(data),
     {
@@ -36,14 +36,14 @@ export const updateOrder = async (data) => {
       },
     }
   );
-  return response.data;
+  return res.data;
 };
 
 export const deleteOrder = async (data) => {
-  const response = await axios.delete(`${url}/orders/${data._id}`, {
+  const res = await axios.delete(`${url}/orders/${data._id}`, {
     headers: {
       Authorization: "Bearer " + data.token, // include token in the API
     },
   });
-  return response.data;
+  return res.data;
 };
