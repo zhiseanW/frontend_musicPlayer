@@ -79,19 +79,7 @@ export default function Header() {
           >
             Cart
           </Button>
-          <Button
-            style={{
-              textTransform: "capitalize",
-              color: location.pathname === "/orders" ? "white" : "#0288d1",
-              backgroundColor:
-                location.pathname === "/orders" ? "#0288d1" : "white",
-            }}
-            onClick={() => {
-              navigate("/orders");
-            }}
-          >
-            Orders
-          </Button>
+
           <Button
             style={{
               textTransform: "capitalize",
@@ -120,6 +108,19 @@ export default function Header() {
                 }}
               >
                 Genre
+              </Button>
+              <Button
+                style={{
+                  textTransform: "capitalize",
+                  color: location.pathname === "/orders" ? "white" : "#0288d1",
+                  backgroundColor:
+                    location.pathname === "/orders" ? "#0288d1" : "white",
+                }}
+                onClick={() => {
+                  navigate("/orders");
+                }}
+              >
+                Orders
               </Button>
               <Button
                 style={{
