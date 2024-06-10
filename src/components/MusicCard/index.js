@@ -151,20 +151,6 @@ export default function MusicCard(props) {
           </Box>
         ) : null}
       </CardContent>
-      <CardActions>
-        <Box display="flex" justifyContent="center" width="100%">
-          <Button
-            fullWidth
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              navigate("/comment/" + music._id);
-            }}
-          >
-            View Comments
-          </Button>
-        </Box>
-      </CardActions>
     </Card>
   );
 }
